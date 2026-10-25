@@ -27,7 +27,7 @@ export default function App() {
       setCoordinates({ latitude, longitude });
 
       // Animate map to user's current location
-      mapRef.current.animateToRegion({
+      mapRef.current?.animateToRegion({
         latitude,
         longitude,
         latitudeDelta: 0.0922,
@@ -50,7 +50,7 @@ export default function App() {
         setCoordinates(newCoordinates);
 
         // Animate the map to new region
-        mapRef.current.animateToRegion({
+        mapRef.current?.animateToRegion({
           ...newCoordinates,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
@@ -82,10 +82,13 @@ export default function App() {
           longitudeDelta: 0.0421,
         }}
       >
-        <Marker
-          coordinate={coordinates}
-          title={address}
-        />
+        {/* react-native-maps on Android calls getDouble on the coordinate, so a null one crashes */}
+        {coordinates && (
+          <Marker
+            coordinate={coordinates}
+            title={address}
+          />
+        )}
       </MapView>
     </View>
   );
