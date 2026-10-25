@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker } from './maps';
 import * as Location from 'expo-location';
 import { geocode, geocoderCredit } from './geocode';
 
