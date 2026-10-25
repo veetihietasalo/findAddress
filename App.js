@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
@@ -37,13 +37,18 @@ export default function App() {
   }, []);
   
   const onShowPress = async () => {
-    const apiUrl = `http://www.mapquestapi.com/geocoding/v1/address?key=${API_KEY}&location=${address}`;
-    
+    const apiUrl = `https://www.mapquestapi.com/geocoding/v1/address?key=${API_KEY}&location=${encodeURIComponent(address)}`;
+
     try {
       const response = await fetch(apiUrl);
       if (response.ok) {
         const data = await response.json();
-        const { lat, lng } = data.results[0].locations[0].latLng;
+        const location = data.results?.[0]?.locations?.[0];
+        if (!location) {
+          Alert.alert('Address not found', address);
+          return;
+        }
+        const { lat, lng } = location.latLng;
         const newCoordinates = { latitude: lat, longitude: lng };
         
         // Update state
